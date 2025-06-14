@@ -127,7 +127,24 @@ export const createBooking = async (req: Request, res: Response) => {
   } catch (error) { res.status(400).json({ message: 'Error creating booking', error }); }
 };
 
-
+export const getMyBookings:any = async (req: Request, res: Response) => {
+  console.log("getMyBookings",req.user)
+  try {
+    // req.user is attached by the 'protect' middleware
+    console.log("inside the try block")
+    if (!req.user) {
+      return res.status(401).json({ message: 'User not authenticated' });
+    }
+    console.log("inside the after user in try block")
+    
+    // Find bookings where the 'user' field matches the logged-in user's ID
+    const bookings = await Booking.find({ user: req.user._id }).sort({ createdAt: -1 });
+    console.log("booking",bookings)
+    res.json(bookings);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching user bookings', error });
+  }
+};
 // --- When a Booking is CONFIRMED ---
 export const updateBookingStatus:any = async (req: Request, res: Response) => {
   try {

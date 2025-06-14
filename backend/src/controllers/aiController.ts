@@ -2,7 +2,7 @@
 import { Request, Response } from 'express';
 import { knowledgeBase } from '../ai/knowledgeBase';
 
-export const getAiSupportAnswer = (req: Request, res: Response) => {
+export const getAiSupportAnswer:any = (req: Request, res: Response) => {
   const { appliance, question } = req.body;
 
   if (!appliance || !question) {

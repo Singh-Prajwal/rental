@@ -20,7 +20,7 @@ const UserSidebar: React.FC = () => {
         <NavLink to="/trips" end className={getLinkClass}>
           <TripsIcon /> <span>Trips</span>
         </NavLink>
-        <NavLink to="/inbox" className={getLinkClass}>
+        {/* <NavLink to="/inbox" className={getLinkClass}>
           <InboxIcon /> <span>Inbox</span>
         </NavLink>
         <NavLink to="/wishlists" className={getLinkClass}>
@@ -28,7 +28,7 @@ const UserSidebar: React.FC = () => {
         </NavLink>
         <NavLink to="/profile" className={getLinkClass}>
           <ProfileIcon /> <span>Profile</span>
-        </NavLink>
+        </NavLink> */}
       </div>
     </aside>
   );

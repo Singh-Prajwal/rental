@@ -16,7 +16,7 @@ const Footer: React.FC = () => {
           </div>
           {/* Copyright */}
           <p className="text-sm text-gray-500">
-            @2024 UrbanStay. All rights reserved.
+            @2025 UrbanStay. All rights reserved.
           </p>
         </div>
       </div>

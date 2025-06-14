@@ -1,8 +1,10 @@
 // src/models/Booking.ts
 import mongoose, { Document, Schema } from 'mongoose';
+import { IUser } from './User';
 
 // Interface to define the properties of a Booking document
 export interface IBooking extends Document {
+  user: mongoose.Types.ObjectId | IUser; 
   propertyId: string;
   propertyName: string;
   checkInDate: Date;
@@ -14,6 +16,11 @@ export interface IBooking extends Document {
 }
 
 const BookingSchema: Schema = new Schema({
+   user: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'User', 
+  },
   propertyId: { type: String, required: true },
   propertyName: { type: String, required: true },
   checkInDate: { type: Date, required: true },

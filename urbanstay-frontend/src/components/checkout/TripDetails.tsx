@@ -8,7 +8,7 @@ const DetailRow = ({ label, value, action }: { label: string; value: string; act
       <p className="font-semibold">{label}</p>
       <p className="text-gray-600 text-sm">{value}</p>
     </div>
-    {action && <button className="font-semibold underline hover:text-brand-primary transition-colors">{action}</button>}
+    {action && <button className="font-semibold text-white underline hover:text-brand-primary transition-colors">{action}</button>}
   </div>
 );
 
@@ -26,8 +26,8 @@ const TripDetails: React.FC = () => {
   return (
     <div className="bg-white text-black rounded-lg shadow-md">
       <div className="p-6">
-        <h2 className="text-xl font-bold mb-4">Your trip</h2>
-        <DetailRow label="Dates" value={formattedDates} action="Edit" />
+        <h2 className="text-xl font-bold  mb-4">Your trip</h2>
+        <DetailRow label="Dates"  value={formattedDates} action="Edit" />
         <DetailRow label="Guests" value={guestText} action="Edit" />
       </div>
     </div>

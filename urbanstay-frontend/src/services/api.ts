@@ -13,7 +13,7 @@ const apiRequest = async (endpoint: string, method: string, body?: any) => {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    
+    console.log(body)
     const response = await fetch(`${BASE_URL}${endpoint}`, {
       method,
       headers: headers,
@@ -62,12 +62,12 @@ export const getSupportRequests = () =>
 
 export const updateSupportRequestStatus = (id: string, status: string) =>
   apiRequest(`/support-requests/${id}`, 'PATCH', { status });
-
+export const scheduleTechnician = (supportRequestId: string, visitData: { technicianName: string; scheduledAt: Date; notes: string; }) =>
+  apiRequest(`/support-requests/${supportRequestId}/schedule-visit`, 'POST', visitData);
 // --- AI Support Function ---
 export const getAiSupport = (appliance: string, question: string) =>
     apiRequest('/ai/support', 'POST', { appliance, question });
 
-export const getMyBookings = () => apiRequest('/bookings/mybookings', 'GET');
 export const getAllProperties = () => 
   apiRequest('/properties', 'GET');
 
@@ -82,3 +82,5 @@ export const updateProperty = (id: string, propertyData: any) =>
 
 export const deleteProperty = (id: string) =>
   apiRequest(`/properties/${id}`, 'DELETE');
+
+export const getMyBookings = () => apiRequest('/bookings/mybookings', 'GET');

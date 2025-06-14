@@ -39,7 +39,7 @@ const CheckoutPage: React.FC = () => {
                   <p className="text-sm text-gray-600">{property.type}</p>
                   <p className="font-semibold">{property.title}</p>
                   <div className="flex items-center text-sm mt-1">
-                    ★ 4.8 (23 reviews) {/* Mocked for now */}
+                    {property.reviews[0].rating}
                   </div>
                 </div>
               </div>

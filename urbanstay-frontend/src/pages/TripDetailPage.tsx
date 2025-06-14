@@ -93,7 +93,7 @@ const TripDetailPage: React.FC = () => {
                             <h2 className="text-2xl font-semibold border-b pb-4">Your reservation</h2>
                             <InfoBlock icon={<CalendarIcon />} title="Check-in">
                                 <p>{format(new Date(booking.checkInDate), 'EEEE, MMMM dd, yyyy')}</p>
-                                <p className="text-sm text-gray-500">From 4:00 PM</p>
+                                <p className="text-sm  text-gray-500">From 4:00 PM</p>
                             </InfoBlock>
                             <InfoBlock icon={<CalendarIcon />} title="Check-out">
                                 <p>{format(new Date(booking.checkOutDate), 'EEEE, MMMM dd, yyyy')}</p>

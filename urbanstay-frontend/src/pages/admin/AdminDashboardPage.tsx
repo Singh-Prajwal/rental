@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { getBookings, updateBookingStatus, getSupportRequests, updateSupportRequestStatus } from '../../services/api';
-
+import { getBookings, updateBookingStatus, getSupportRequests, updateSupportRequestStatus, scheduleTechnician } from '../../services/api';
+import ScheduleTechForm from './ScheduleTechForm';
 interface Booking {
   _id: string;
   propertyName: string;
@@ -47,7 +47,8 @@ const AdminDashboardPage: React.FC = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [supportRequests, setSupportRequests] = useState<SupportRequest[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [isScheduling, setIsScheduling] = useState(false);
+  const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null);
   const fetchBookings = async () => {
     try {
       setIsLoading(true);
@@ -59,7 +60,23 @@ const AdminDashboardPage: React.FC = () => {
       setIsLoading(false);
     }
   };
-
+  const handleOpenScheduler = (ticketId: string) => {
+    setSelectedTicketId(ticketId);
+    setIsScheduling(true);
+  };
+ const handleScheduleSubmit = async (visitData: { technicianName: string; scheduledAt: Date; notes: string; }) => {
+    if (!selectedTicketId) return;
+    try {
+      await scheduleTechnician(selectedTicketId, visitData);
+      alert('Technician scheduled successfully and guest has been notified.');
+      setIsScheduling(false);
+      setSelectedTicketId(null);
+      fetchSupportRequests(); // Refresh list to show updated status
+    } catch (error) {
+      alert('Failed to schedule technician.');
+      console.error(error);
+    }
+  };
   const fetchSupportRequests = async () => {
     try {
       const data = await getSupportRequests();
@@ -150,7 +167,7 @@ const AdminDashboardPage: React.FC = () => {
       </div>
 
       {/* Support Requests Table */}
-      <div className="bg-white p-6 rounded-lg shadow">
+      {/* <div className="bg-white p-6 rounded-lg shadow">
         <h2 className="text-xl font-semibold mb-4">Recent Support Requests</h2>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -183,10 +200,51 @@ const AdminDashboardPage: React.FC = () => {
             </tbody>
           </table>
         </div>
+      </div> */}
+      <div className="bg-white p-6 rounded-lg shadow">
+        <h2 className="text-xl font-semibold mb-4">Recent Support Requests</h2>
+        <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                    <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Issue</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                    </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                    {supportRequests.map(r => (
+                        <tr key={r._id}>
+                            <td className="px-6 py-4 text-sm text-gray-800">{r.issue}</td>
+                            <td className="px-6 py-4 text-sm font-semibold">{r.status}</td>
+                            <td className="px-6 py-4 text-sm space-x-2">
+                                {(r.status === 'Open' || r.status === 'In Progress') && (
+                                    <button onClick={() => handleOpenScheduler(r._id)} className="text-blue-600 hover:text-blue-900 font-semibold">
+                                        Schedule Tech
+                                    </button>
+                                )}
+                                {r.status !== 'Closed' && (
+                                    <button onClick={() => handleUpdateSupportStatus(r._id, 'Closed')} className="text-red-600 hover:text-red-900 font-semibold">
+                                        Close Ticket
+                                    </button>
+                                )}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
       </div>
+      
+      {isScheduling && selectedTicketId && (
+        <ScheduleTechForm 
+          isSaving={false} /* you can wire this up for better UX */
+          onClose={() => setIsScheduling(false)} 
+          onSubmit={handleScheduleSubmit} 
+        />
+      )}
     </div>
-  );
-};
+  );}
 
 export default AdminDashboardPage;
 
